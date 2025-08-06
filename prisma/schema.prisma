@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model GameRoom {
+  id          String   @id @default(cuid())
+  roomCode    String   @unique
+  title       String
+  isActive    Boolean  @default(false)
+  maxAttempts Int      @default(3)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  teacherId   String?
+  teacher     Teacher? @relation(fields: [teacherId], references: [id])
+  participants Participant[]
+  questions   Question[]
+  gameSessions GameSession[]
+}
+
+model Teacher {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  gameRooms GameRoom[]
+}
+
+model Participant {
+  id          String   @id @default(cuid())
+  nickname    String
+  score       Int      @default(0)
+  isActive    Boolean  @default(true)
+  joinedAt    DateTime @default(now())
+  
+  roomId      String
+  room        GameRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  answers     Answer[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  text        String
+  type        QuestionType
+  options     String?  // JSON string for multiple choice options
+  correctAnswer String
+  points      Int      @default(1)
+  imageUrl    String?  // For image-based questions
+  attachmentUrl String? // For file attachments
+  order       Int
+  isActive    Boolean  @default(true)
+  timerEnabled Boolean  @default(false)
+  timerMinutes Int?     @default(0)
+  timerSeconds Int?     @default(30)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  roomId      String
+  room        GameRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  answers     Answer[]
+}
+
+model Answer {
+  id           String   @id @default(cuid())
+  answer       String
+  isCorrect    Boolean
+  attemptNumber Int     @default(1)
+  timeTaken    Int?     // Time taken to answer in milliseconds
+  createdAt    DateTime @default(now())
+  
+  questionId   String
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  participantId String
+  participant  Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  
+  gameSessionId String
+  gameSession  GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+}
+
+model GameSession {
+  id          String   @id @default(cuid())
+  currentQuestionIndex Int @default(0)
+  status      SessionStatus @default(WAITING)
+  startedAt   DateTime?
+  endedAt     DateTime?
+  currentBuzzes String? // JSON string array of participant IDs who buzzed
+  
+  roomId      String
+  room        GameRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  answers     Answer[]
+}
+
+enum QuestionType {
+  TRUE_FALSE
+  MULTIPLE_CHOICE
+  SHORT_ANSWER
+  LONG_ANSWER
+  MATCHING_TYPE
+  IMAGE_BASED
+  FILE_ATTACHMENT
+}
+
+enum SessionStatus {
+  WAITING
+  ACTIVE
+  PAUSED
+  ENDED
+}

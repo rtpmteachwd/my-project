@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTPM Dumaguete Science High School Interactive Game System - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #FADADD 0%, #F0F0F0 50%, #FADADD 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            space-y: 32px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: #D291BC;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2E2E2E;
+            margin-bottom: 8px;
+        }
+        
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2E2E2E;
+            margin-bottom: 16px;
+        }
+        
+        .description {
+            font-size: 18px;
+            color: #2E2E2E;
+            max-width: 800px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+        
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .badge-blue {
+            background: #A1C6EA;
+            color: #2E2E2E;
+        }
+        
+        .badge-green {
+            background: #B8E1DD;
+            color: #2E2E2E;
+        }
+        
+        .badge-pink {
+            background: #D291BC;
+            color: white;
+        }
+        
+        .badge-orange {
+            background: #FF6F61;
+            color: white;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 32px;
+        }
+        
+        @media (min-width: 768px) {
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 48px;
+        }
+        
+        .teacher-icon {
+            background: #D291BC;
+        }
+        
+        .student-icon {
+            background: #FF6F61;
+        }
+        
+        .card h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E2E2E;
+            margin-bottom: 8px;
+        }
+        
+        .card p {
+            color: #2E2E2E;
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #2E2E2E;
+        }
+        
+        .feature-check {
+            color: #22c55e;
+            font-weight: bold;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button-teacher {
+            background: #D291BC;
+            color: white;
+        }
+        
+        .button-teacher:hover {
+            background: #C17FA9;
+        }
+        
+        .button-student {
+            background: #FF6F61;
+            color: white;
+        }
+        
+        .button-student:hover {
+            background: #E55A4A;
+        }
+        
+        .question-types {
+            margin-top: 48px;
+            text-align: center;
+        }
+        
+        .question-types h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E2E2E;
+            margin-bottom: 24px;
+        }
+        
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .question-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .question-type {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .question-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2E2E2E;
+        }
+        
+        .status {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .status h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .status p {
+            color: #78350f;
+            font-size: 14px;
+        }
+        
+        .instructions {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 32px;
+        }
+        
+        .instructions h4 {
+            color: #075985;
+            margin-bottom: 12px;
+        }
+        
+        .instructions ol {
+            color: #0c4a6e;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Status Notice -->
+        <div class="status">
+            <h4>🚧 Preview Mode</h4>
+            <p>This is a static preview of the application. The full version requires Node.js and dependencies to be installed.</p>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">🎮</div>
+                <h1>RTPM Dumaguete</h1>
+            </div>
+            <h2>Science High School Interactive Gameshow</h2>
+            <p class="description">
+                Transform classroom learning into an exciting, competitive experience with real-time quizzes, 
+                buzzer systems, and engaging multimedia content.
+            </p>
+            <div class="badges">
+                <span class="badge badge-blue">Real-time Buzzer</span>
+                <span class="badge badge-green">Live Leaderboard</span>
+                <span class="badge badge-pink">Multiple Question Types</span>
+                <span class="badge badge-orange">No Account Required</span>
+            </div>
+        </div>
+        
+        <!-- Role Selection Cards -->
+        <div class="cards">
+            <!-- Teacher Card -->
+            <div class="card" onclick="alert('This would navigate to the teacher interface in the full app')">
+                <div class="card-icon teacher-icon">👩‍🏫</div>
+                <h3>Teacher/Admin</h3>
+                <p>Host and control game sessions</p>
+                <div class="features">
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Create game rooms with unique codes</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Design custom questions</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Monitor student progress</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Control buzzer system</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>View real-time leaderboard</span>
+                    </div>
+                </div>
+                <button class="button button-teacher">Continue as Teacher</button>
+            </div>
+            
+            <!-- Student Card -->
+            <div class="card" onclick="alert('This would navigate to the student join interface in the full app')">
+                <div class="card-icon student-icon">👨‍🎓</div>
+                <h3>Student/Participant</h3>
+                <p>Join games and compete with classmates</p>
+                <div class="features">
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>No account required</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Join with nickname & room code</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Buzz in to answer questions</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Earn points for correct answers</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span>Compete on live leaderboard</span>
+                    </div>
+                </div>
+                <button class="button button-student">Continue as Student</button>
+            </div>
+        </div>
+        
+        <!-- Question Types -->
+        <div class="question-types">
+            <h3>Supported Question Types</h3>
+            <div class="question-grid">
+                <div class="question-type">
+                    <div class="question-icon">✅</div>
+                    <div class="question-name">True/False</div>
+                </div>
+                <div class="question-type">
+                    <div class="question-icon">❓</div>
+                    <div class="question-name">Multiple Choice</div>
+                </div>
+                <div class="question-type">
+                    <div class="question-icon">✍️</div>
+                    <div class="question-name">Short Answer</div>
+                </div>
+                <div class="question-type">
+                    <div class="question-icon">🖼️</div>
+                    <div class="question-name">Image-Based</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h4>📋 How to Run the Full Application</h4>
+            <ol>
+                <li>Install Node.js from <a href="https://nodejs.org/" target="_blank">nodejs.org</a></li>
+                <li>Install Git from <a href="https://git-scm.com/" target="_blank">git-scm.com</a></li>
+                <li>Open terminal/command prompt in the project directory</li>
+                <li>Run <code>npm install</code> to install dependencies</li>
+                <li>Run <code>npm run db:push</code> to set up the database</li>
+                <li>Run <code>npm run dev</code> to start the development server</li>
+                <li>Open your browser to <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+            </ol>
+            <p style="margin-top: 12px; font-size: 14px; color: #0c4a6e;">
+                <strong>Quick Start:</strong> Windows users can double-click <code>start.bat</code>, Mac/Linux users can run <code>./start.sh</code>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
